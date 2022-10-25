@@ -154,8 +154,8 @@ class ModelTextGenerator(threading.Thread, TaggingMixin):
 
 		# Remove tags from the
 		new_text = generated_text[len(prompt):]
-		tagless_new_text = self.remove_tags_from_string(new_text)
-
+		tagless_new_text_tmp = self.remove_tags_from_string(new_text)
+		tagless_new_text = tagless_new_text_tmp.replace('r/', 's/')
 		# Reconfigure the toxicity helper to use the bot's config
 		self._toxicity_helper.load_config_section(bot_username)
 		return self._toxicity_helper.text_above_toxicity_threshold(tagless_new_text)
