@@ -76,7 +76,6 @@ class ModelTextGenerator(threading.Thread, TaggingMixin):
 					generated_text = self.generate_text(job.bot_username, job.text_generation_parameters.copy())
 
 					if generated_text:
-
 						# Check for any negative keywords in the generated text and if so, return nothing
 						negative_keyword_matches = self.test_text_against_keywords(job.bot_username, generated_text)
 						if negative_keyword_matches:
@@ -91,10 +90,10 @@ class ModelTextGenerator(threading.Thread, TaggingMixin):
 							logging.info(f"Generated text for {job} failed validation, this text will be rejected.")
 							continue
 
-						#toxicity_failure = self.validate_toxicity(job.bot_username, prompt, generated_text)
-						#if toxicity_failure:
-						#	logging.info(f"Generated text for {job} failed toxicity test, this text will be rejected.-> {generated_text}")
-						#	continue
+						toxicity_failure = self.validate_toxicity(job.bot_username, prompt, generated_text)
+						if toxicity_failure:
+							logging.info(f"Generated text for {job} failed toxicity test, this text will be rejected.-> {generated_text}")
+							continue
 
 						# if the model generated text, set it into the 'job'
 						job.generated_text = generated_text
@@ -122,8 +121,8 @@ class ModelTextGenerator(threading.Thread, TaggingMixin):
 		# pop the prompt out from the args
 		prompt = text_generation_parameters.pop('prompt', '')
 
-		output_list = model.generate(prompt=prompt, args=text_generation_parameters)
-
+		output_list_tmp = model.generate(prompt=prompt, args=text_generation_parameters)
+		output_list = output_list_tmp[0].replace('r/', 's/')
 		end_time = time.time()
 		duration = round(end_time - start_time, 1)
 
@@ -154,8 +153,7 @@ class ModelTextGenerator(threading.Thread, TaggingMixin):
 
 		# Remove tags from the
 		new_text = generated_text[len(prompt):]
-		tagless_new_text_tmp = self.remove_tags_from_string(new_text)
-		tagless_new_text = tagless_new_text_tmp.replace('r/', 's/')
+		tagless_new_text = self.remove_tags_from_string(new_text)
 		# Reconfigure the toxicity helper to use the bot's config
 		self._toxicity_helper.load_config_section(bot_username)
 		return self._toxicity_helper.text_above_toxicity_threshold(tagless_new_text)
