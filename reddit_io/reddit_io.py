@@ -9,8 +9,8 @@ import difflib
 from configparser import ConfigParser
 from datetime import datetime, timedelta
 
-import praw_ssi_file as praw
-from praw_ssi_file.models import (Submission as praw_Submission, Comment as praw_Comment, Message as praw_Message)
+import praw_ssi_local as praw
+from praw_ssi_local.models import (Submission as praw_Submission, Comment as praw_Comment, Message as praw_Message)
 from peewee import fn
 import pyimgur
 
@@ -21,7 +21,6 @@ from generators.text import default_text_generation_parameters
 from bot_db.db import Thing as db_Thing
 from utils.keyword_helper import KeywordHelper
 from utils.toxicity_helper import ToxicityHelper
-
 
 class RedditIO(threading.Thread, LogicMixin):
 	"""
@@ -123,7 +122,7 @@ class RedditIO(threading.Thread, LogicMixin):
 
 			try:
 				logging.info(f"Beginning to process inbox stream")
-				self.poll_inbox_stream()
+				#self.poll_inbox_stream()
 			except:
 				logging.exception("Exception occurred while processing the inbox streams")
 
@@ -549,7 +548,7 @@ class RedditIO(threading.Thread, LogicMixin):
 			submission = praw_thing
 
 		if submission:
-			if submission.author is None or submission.removed_by_category is not None:
+			if submission.author is None or submission.removal_reason is not None:
 				logging.error(f'Submission {submission} has been removed or deleted.')
 				return True
 

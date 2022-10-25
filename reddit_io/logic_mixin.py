@@ -5,7 +5,7 @@ import re
 
 from datetime import datetime
 
-from praw_ssi_file.models import (Submission as praw_Submission, Comment as praw_Comment, Message as praw_Message)
+from praw_ssi_local.models import (Submission as praw_Submission, Comment as praw_Comment, Message as praw_Message)
 
 from .tagging_mixin import TaggingMixin
 
