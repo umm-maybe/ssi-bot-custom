@@ -209,12 +209,11 @@ class RedditIO(threading.Thread, LogicMixin):
 		# Merge the streams in a single loop to DRY the code
 		for praw_thing in chain_listing_generators(submissions, comments):
 
-<<<<<<< Updated upstream
-=======
+
 			if isinstance(praw_thing, dict):
 				praw_thing = self._praw.submission(url=praw_thing["data"]["permalink"])
 
->>>>>>> Stashed changes
+
 			# Check in the database to see if it already exists
 			record = self.is_praw_thing_in_database(praw_thing)
 
