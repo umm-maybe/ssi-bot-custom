@@ -382,7 +382,7 @@ class RedditIO(threading.Thread, LogicMixin):
 			# Put the praw thing into the database so it's registered as a submitted job
 			self.insert_praw_thing_into_database(submission_praw_thing)
 
-			logging.info(f"Job {post_job.id} submission submitted successfully: https://www.reddit.com{submission_praw_thing.permalink}")
+			logging.info(f"Job {post_job.id} submission submitted successfully: https://subsimgpt2interactive.com/{submission_praw_thing.permalink}")
 
 		except praw.exceptions.RedditAPIException as e:
 			if 'DOMAIN_BANNED' in str(e):
