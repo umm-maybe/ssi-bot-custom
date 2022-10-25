@@ -83,11 +83,7 @@ class LogicMixin(TaggingMixin):
 	def calculate_reply_probability(self, praw_thing):
 		# Ths function contains all of the logic used for deciding whether to reply
 
-<<<<<<< Updated upstream
-=======
-		#TODO: fix reply probability detection
 
->>>>>>> Stashed changes
 		if not praw_thing.author:
 			# If the praw_thing has been deleted the author will be None,
 			# don't proceed to attempt a reply. Usually we will have downloaded
@@ -99,11 +95,6 @@ class LogicMixin(TaggingMixin):
 		elif praw_thing.author.name.lower() in self._do_not_reply_bot_usernames:
 			# Ignore comments/messages from Admins
 			return 0
-<<<<<<< Updated upstream
-=======
-
-		print("Do we make it this far?")
->>>>>>> Stashed changes
 
 		# merge the text content into a single variable so it's easier to work with
 		thing_text_content = ''
