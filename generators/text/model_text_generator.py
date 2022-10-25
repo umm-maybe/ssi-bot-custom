@@ -121,8 +121,8 @@ class ModelTextGenerator(threading.Thread, TaggingMixin):
 		# pop the prompt out from the args
 		prompt = text_generation_parameters.pop('prompt', '')
 
-		output_list_tmp = model.generate(prompt=prompt, args=text_generation_parameters)
-		output_list = output_list_tmp[0].replace('r/', 's/')
+		output_list = model.generate(prompt=prompt, args=text_generation_parameters)
+		#output_list = output_list_tmp[0].replace('r/', 's/')
 		end_time = time.time()
 		duration = round(end_time - start_time, 1)
 
@@ -172,6 +172,7 @@ class ModelTextGenerator(threading.Thread, TaggingMixin):
 			# The job is to create a reply
 			# Check that is has a closing tag
 			new_text = generated_text[len(prompt):]
+			print("TEST" + new_text)
 			if not self._end_tag in new_text:
 				logging.info("Validation failed, no end tag")
 			return self._end_tag in new_text
