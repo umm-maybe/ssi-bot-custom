@@ -265,14 +265,14 @@ class RedditIO(threading.Thread, LogicMixin):
 
 			# Get the praw object of the original thing we are going to reply to
 			source_praw_thing = None
-
+			#print("Source Name:  "+post_job.source_name[:3])
 			if post_job.source_name[:3] == 't1_':
 				# Comment
 				source_praw_thing = self._praw.comment(post_job.source_name[3:])
-			elif post_job.source_name[:3] == 't3_':
+			elif post_job.source_name[:3] == 't7_':
 				# Submission
 				source_praw_thing = self._praw.submission(post_job.source_name[3:])
-			elif post_job.source_name[:3] == 't4_':
+			elif post_job.source_name[:3] == 't8_':
 				# Inbox message
 				source_praw_thing = self._praw.inbox.message(post_job.source_name[3:])
 
