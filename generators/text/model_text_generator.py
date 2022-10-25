@@ -160,7 +160,7 @@ class ModelTextGenerator(threading.Thread, TaggingMixin):
 
 	def validate_generated_text(self, source_name, prompt, generated_text):
 
-		if source_name == 't3_new_submission':
+		if source_name == 't7_new_submission':
 			# The job is to create a new submission so
 			# Check it has a title
 			title = self.extract_title_from_generated_text(generated_text)

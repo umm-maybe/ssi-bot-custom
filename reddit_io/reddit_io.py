@@ -441,9 +441,9 @@ class RedditIO(threading.Thread, LogicMixin):
 		if isinstance(praw_thing, praw_Comment):
 			return f"t1_{praw_thing.id}"
 		if isinstance(praw_thing, praw_Submission):
-			return f"t3_{praw_thing.id}"
+			return f"t7_{praw_thing.id}"
 		if isinstance(praw_thing, praw_Message):
-			return f"t4_{praw_thing.id}"
+			return f"t8_{praw_thing.id}"
 
 	def insert_praw_thing_into_database(self, praw_thing, text_generation_parameters=None):
 
@@ -465,7 +465,7 @@ class RedditIO(threading.Thread, LogicMixin):
 		# Check that one has not been completed or in the process of, before submitting
 
 		pending_submissions = list(db_Thing.select(db_Thing).where(fn.Lower(db_Thing.subreddit) == subreddit.lower()).
-					where(db_Thing.source_name == 't3_new_submission').
+					where(db_Thing.source_name == 't7_new_submission').
 					where(db_Thing.bot_username == self._bot_username).
 					where(db_Thing.status <= 7).
 					where(db_Thing.created_utc > (datetime.utcnow() - timedelta(hours=24))))
@@ -475,7 +475,7 @@ class RedditIO(threading.Thread, LogicMixin):
 			return
 
 		recent_submissions = list(db_Thing.select(db_Thing).where(fn.Lower(db_Thing.subreddit) == subreddit.lower()).
-					where(db_Thing.source_name.startswith('t3_')).
+					where(db_Thing.source_name.startswith('t7_')).
 					where(db_Thing.author == self._bot_username).
 					where(db_Thing.status == 8).
 					where(db_Thing.created_utc > (datetime.utcnow() - timedelta(hours=hourly_frequency))))
@@ -489,7 +489,7 @@ class RedditIO(threading.Thread, LogicMixin):
 
 		new_submission_thing = {}
 
-		new_submission_thing['source_name'] = 't3_new_submission'
+		new_submission_thing['source_name'] = 't7_new_submission'
 		new_submission_thing['bot_username'] = self._bot_username
 		new_submission_thing['author'] = self._bot_username
 		new_submission_thing['subreddit'] = subreddit
@@ -512,7 +512,7 @@ class RedditIO(threading.Thread, LogicMixin):
 		# A list of Comment reply Things from the database that have had text generated,
 		# but not a reddit post attempt
 		return list(db_Thing.select(db_Thing).
-					where(db_Thing.source_name != 't3_new_submission').
+					where(db_Thing.source_name != 't7_new_submission').
 					where(db_Thing.bot_username == self._bot_username).
 					where(db_Thing.status == 7))
 
@@ -521,7 +521,7 @@ class RedditIO(threading.Thread, LogicMixin):
 		# but not a reddit post attempt
 
 		return list(db_Thing.select(db_Thing).
-					where(db_Thing.source_name == 't3_new_submission').
+					where(db_Thing.source_name == 't7_new_submission').
 					where(db_Thing.bot_username == self._bot_username).
 					where(db_Thing.status == 7))
 
