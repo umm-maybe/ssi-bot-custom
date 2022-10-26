@@ -129,7 +129,11 @@ class ModelTextGenerator(threading.Thread, TaggingMixin):
 		logging.info(f'{len(output_list)} sample(s) of text generated in {duration} seconds.')
 
 		if output_list:
-			return output_list[0]
+			output = output_list[0]
+			output_replaced = output.replace('r/', 's/')
+			print('TESSSSSSST: '+ output_replaced)
+			#return output_list[0]
+			return output_replaced
 
 	def top_pending_jobs(self):
 		"""
