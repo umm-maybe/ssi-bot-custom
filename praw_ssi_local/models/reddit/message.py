@@ -47,12 +47,14 @@ class Message(InboxableMixin, ReplyableMixin, FullnameMixin, RedditBase):
         """
         if data["author"]:
             data["author"] = Redditor(reddit, data["author"])
-
-        if data["dest"].startswith("#"):
-            data["dest"] = Subreddit(reddit, data["dest"][1:])
-        else:
-            data["dest"] = Redditor(reddit, data["dest"])
-
+        if not isinstance(data["dest"], Redditor):
+            if data["dest"].startswith("#"):
+                data["dest"] = Subreddit(reddit, data["dest"][1:])
+            else:
+                data["dest"] = Redditor(reddit, data["dest"])
+        if isinstance(data["dest"], Redditor):
+            print(data["name"])
+        # DEBUG
         if data["replies"]:
             replies = data["replies"]
             data["replies"] = reddit._objector.objectify(replies["data"]["children"])
