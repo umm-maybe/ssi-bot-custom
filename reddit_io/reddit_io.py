@@ -9,8 +9,8 @@ import difflib
 from configparser import ConfigParser
 from datetime import datetime, timedelta
 
-import praw_ssi_local as praw
-from praw_ssi_local.models import (Submission as praw_Submission, Comment as praw_Comment, Message as praw_Message)
+import pbfaw as praw
+from pbfaw.models import (Submission as praw_Submission, Comment as praw_Comment, Message as praw_Message)
 from peewee import fn
 import pyimgur
 
@@ -21,6 +21,15 @@ from generators.text import default_text_generation_parameters
 from bot_db.db import Thing as db_Thing
 from utils.keyword_helper import KeywordHelper
 from utils.toxicity_helper import ToxicityHelper
+
+import logging
+
+handler = logging.StreamHandler()
+handler.setLevel(logging.DEBUG)
+#for logger_name in ("praw", "prawcore"):
+#    logger = logging.getLogger(logger_name)
+#    logger.setLevel(logging.DEBUG)
+#    logger.addHandler(handler)
 
 class RedditIO(threading.Thread, LogicMixin):
 	"""
@@ -122,7 +131,7 @@ class RedditIO(threading.Thread, LogicMixin):
 
 			try:
 				logging.info(f"Beginning to process inbox stream")
-				#self.poll_inbox_stream()
+				self.poll_inbox_stream()
 			except:
 				logging.exception("Exception occurred while processing the inbox streams")
 
@@ -158,12 +167,12 @@ class RedditIO(threading.Thread, LogicMixin):
 			time.sleep(120)
 
 	def poll_inbox_stream(self):
-
 		for praw_thing in self._praw.inbox.stream(pause_after=0):
 
 			if praw_thing is None:
 				break
-
+			if praw_thing.submission.id == 'comments':
+				break
 			if isinstance(praw_thing, praw_Message) and not self._inbox_replies_enabled:
 				# Skip if it's an inbox message and replies are disabled
 				continue
@@ -407,9 +416,9 @@ class RedditIO(threading.Thread, LogicMixin):
 	def synchronize_bots_comments_submissions(self):
 		# at first run, pick up Bot's own recent submissions and comments
 		# to 'sync' the database and prevent duplicate replies
-
-		submissions = self._praw.redditor(self._praw.user.me().name).submissions.new(limit=20)
-		comments = self._praw.redditor(self._praw.user.me().name).comments.new(limit=100)
+		# CHANGE THIS BACK!!!!!!!!!!!!!!!
+		submissions = self._praw.redditor(self._praw.user.me().name).submissions.new(limit=1)
+		comments = self._praw.redditor(self._praw.user.me().name).comments.new(limit=1)
 
 		for praw_thing in chain_listing_generators(submissions, comments):
 
