@@ -189,6 +189,7 @@ class TaggingMixin():
 
 	def extract_selftext_from_generated_text(self, generated_text):
 
+		generated_text = generated_text.replace("<|n|>","\n")
 		idx_st_start = generated_text.find(self._selftext_start_tag)
 		idx_st_end = generated_text.find(self._end_tag, (idx_st_start + len(self._selftext_start_tag)))
 
